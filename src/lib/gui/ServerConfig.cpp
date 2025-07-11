@@ -324,27 +324,29 @@ int ServerConfig::numScreens() const
 
 int ServerConfig::autoAddScreen(const QString name)
 {
+  using enum AddAction;
+
   int serverIndex = -1;
   int targetIndex = -1;
   const auto screenName = Settings::value(Settings::Core::ScreenName).toString();
   if (!findScreenName(screenName, serverIndex) && !fixNoServer(screenName, serverIndex)) {
-    return kAutoAddScreenManualServer;
+    return AutoAddScreenManualServer;
   }
 
   if (findScreenName(name, targetIndex)) {
     qDebug("ignoring screen already in config: %s", qPrintable(name));
-    return kAutoAddScreenIgnore;
+    return AutoAddScreenIgnore;
   }
 
-  int result = showAddClientDialog(name);
+  auto result = static_cast<AddAction>(showAddClientDialog(name));
 
-  if (result == kAddClientIgnore) {
-    return kAutoAddScreenIgnore;
+  if (result == AddClientIgnore) {
+    return AutoAddScreenIgnore;
   }
 
-  if (result == kAddClientOther) {
+  if (result == AddClientOther) {
     addToFirstEmptyGrid(name);
-    return kAutoAddScreenManualClient;
+    return AutoAddScreenManualClient;
   }
 
   bool success = false;
@@ -352,13 +354,13 @@ int ServerConfig::autoAddScreen(const QString name)
   int offset = 1;
   int dirIndex = 0;
 
-  if (result == kAddClientLeft) {
+  if (result == AddClientLeft) {
     offset = -1;
     dirIndex = 1;
-  } else if (result == kAddClientUp) {
+  } else if (result == AddClientUp) {
     offset = -5;
     dirIndex = 2;
-  } else if (result == kAddClientDown) {
+  } else if (result == AddClientDown) {
     offset = 5;
     dirIndex = 3;
   }
@@ -377,10 +379,10 @@ int ServerConfig::autoAddScreen(const QString name)
 
   if (!success) {
     addToFirstEmptyGrid(name);
-    return kAutoAddScreenManualClient;
+    return AutoAddScreenManualClient;
   }
 
-  return kAutoAddScreenOk;
+  return AutoAddScreenOk;
 }
 
 const QString ServerConfig::getServerName() const
@@ -488,7 +490,7 @@ bool ServerConfig::fixNoServer(const QString &name, int &index)
 
 int ServerConfig::showAddClientDialog(const QString &clientName)
 {
-  int result = kAddClientIgnore;
+  auto result = static_cast<int>(AddAction::AddClientIgnore);
 
   if (!m_pMainWindow->isActiveWindow()) {
     m_pMainWindow->showNormal();
@@ -497,7 +499,7 @@ int ServerConfig::showAddClientDialog(const QString &clientName)
 
   AddClientDialog addClientDialog(clientName, m_pMainWindow);
   addClientDialog.exec();
-  result = addClientDialog.addResult();
+  result = static_cast<int>(addClientDialog.addResult());
 
   return result;
 }

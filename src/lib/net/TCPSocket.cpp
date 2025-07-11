@@ -21,7 +21,7 @@
 #include <cstring>
 #include <memory>
 
-static const std::size_t MAX_INPUT_BUFFER_SIZE = 1024 * 1024;
+static const std::size_t s_maxInputBufferSize = 1024 * 1024;
 
 //
 // TCPSocket
@@ -296,7 +296,7 @@ void TCPSocket::init()
   }
 }
 
-TCPSocket::EJobResult TCPSocket::doRead()
+TCPSocket::JobResult TCPSocket::doRead()
 {
   uint8_t buffer[4096];
   memset(buffer, 0, sizeof(buffer));
@@ -311,7 +311,7 @@ TCPSocket::EJobResult TCPSocket::doRead()
     do {
       m_inputBuffer.write(buffer, static_cast<uint32_t>(bytesRead));
 
-      if (m_inputBuffer.getSize() > MAX_INPUT_BUFFER_SIZE) {
+      if (m_inputBuffer.getSize() > s_maxInputBufferSize) {
         break;
       }
 
@@ -332,13 +332,13 @@ TCPSocket::EJobResult TCPSocket::doRead()
       m_connected = false;
     }
     m_readable = false;
-    return kNew;
+    return JobResult::New;
   }
 
-  return kRetry;
+  return JobResult::Retry;
 }
 
-TCPSocket::EJobResult TCPSocket::doWrite()
+TCPSocket::JobResult TCPSocket::doWrite()
 {
   // write data
   uint32_t bufferSize = 0;
@@ -350,10 +350,10 @@ TCPSocket::EJobResult TCPSocket::doWrite()
 
   if (bytesWrote > 0) {
     discardWrittenData(bytesWrote);
-    return kNew;
+    return JobResult::New;
   }
 
-  return kRetry;
+  return JobResult::Retry;
 }
 
 void TCPSocket::setJob(ISocketMultiplexerJob *job)
@@ -393,7 +393,9 @@ ISocketMultiplexerJob *TCPSocket::newJob()
 void TCPSocket::sendConnectionFailedEvent(const char *msg)
 {
   auto *info = new ConnectionFailedInfo(msg);
-  m_events->addEvent(Event(EventTypes::DataSocketConnectionFailed, getEventTarget(), info, Event::kDontFreeData));
+  m_events->addEvent(
+      Event(EventTypes::DataSocketConnectionFailed, getEventTarget(), info, Event::EventFlags::DontFreeData)
+  );
 }
 
 void TCPSocket::sendEvent(EventTypes type)
@@ -486,6 +488,7 @@ ISocketMultiplexerJob *TCPSocket::serviceConnecting(ISocketMultiplexerJob *job, 
 ISocketMultiplexerJob *TCPSocket::serviceConnected(ISocketMultiplexerJob *job, bool read, bool write, bool error)
 {
   using enum EventTypes;
+  using enum JobResult;
   Lock lock(&m_mutex);
 
   if (error) {
@@ -494,8 +497,8 @@ ISocketMultiplexerJob *TCPSocket::serviceConnected(ISocketMultiplexerJob *job, b
     return newJob();
   }
 
-  EJobResult readResult = kRetry;
-  EJobResult writeResult = kRetry;
+  JobResult readResult = Retry;
+  JobResult writeResult = Retry;
 
   if (write) {
     try {
@@ -509,19 +512,19 @@ ISocketMultiplexerJob *TCPSocket::serviceConnected(ISocketMultiplexerJob *job, b
         sendEvent(SocketDisconnected);
         m_connected = false;
       }
-      writeResult = kNew;
+      writeResult = New;
     } catch (XArchNetworkDisconnected &) {
       // stream hungup
       onDisconnected();
       sendEvent(SocketDisconnected);
-      writeResult = kNew;
+      writeResult = New;
     } catch (XArchNetwork &e) {
       // other write error
       LOG((CLOG_WARN "error writing socket: %s", e.what()));
       onDisconnected();
       sendEvent(StreamOutputError);
       sendEvent(SocketDisconnected);
-      writeResult = kNew;
+      writeResult = New;
     }
   }
 
@@ -532,17 +535,17 @@ ISocketMultiplexerJob *TCPSocket::serviceConnected(ISocketMultiplexerJob *job, b
       // stream hungup
       sendEvent(SocketDisconnected);
       onDisconnected();
-      readResult = kNew;
+      readResult = New;
     } catch (XArchNetwork &e) {
       // ignore other read error
       LOG((CLOG_WARN "error reading socket: %s", e.what()));
     }
   }
 
-  if (readResult == kBreak || writeResult == kBreak)
+  if (readResult == Break || writeResult == Break)
     return nullptr;
 
-  if (writeResult == kNew || readResult == kNew)
+  if (writeResult == New || readResult == New)
     return newJob();
 
   return job;

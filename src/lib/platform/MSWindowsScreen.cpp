@@ -302,7 +302,7 @@ void MSWindowsScreen::leave()
     m_hook.setMode(kHOOK_RELAY_EVENTS);
 
     m_primaryKeyDownList.clear();
-    for (KeyButton i = 0; i < IKeyState::kNumButtons; ++i) {
+    for (KeyButton i = 0; i < IKeyState::s_numButtons; ++i) {
       if (m_keyState->isKeyDown(i)) {
         m_primaryKeyDownList.push_back(i);
         LOG((CLOG_DEBUG1 "key button %d is down before leaving to another screen", i));
@@ -951,7 +951,8 @@ bool MSWindowsScreen::onEvent(HWND, UINT msg, WPARAM wParam, LPARAM lParam, LRES
   /* On windows 10 we don't receive WM_POWERBROADCAST after sleep.
    We receive only WM_TIMECHANGE hence this message is used to resume.*/
   case WM_TIMECHANGE:
-    m_events->addEvent(Event(EventTypes::ScreenResume, getEventTarget(), nullptr, Event::kDeliverImmediately));
+    m_events->addEvent(Event(EventTypes::ScreenResume, getEventTarget(), nullptr, Event::EventFlags::DeliverImmediately)
+    );
     break;
 
   case WM_POWERBROADCAST:
@@ -959,11 +960,15 @@ bool MSWindowsScreen::onEvent(HWND, UINT msg, WPARAM wParam, LPARAM lParam, LRES
     case PBT_APMRESUMEAUTOMATIC:
     case PBT_APMRESUMECRITICAL:
     case PBT_APMRESUMESUSPEND:
-      m_events->addEvent(Event(EventTypes::ScreenResume, getEventTarget(), nullptr, Event::kDeliverImmediately));
+      m_events->addEvent(
+          Event(EventTypes::ScreenResume, getEventTarget(), nullptr, Event::EventFlags::DeliverImmediately)
+      );
       break;
 
     case PBT_APMSUSPEND:
-      m_events->addEvent(Event(EventTypes::ScreenSuspend, getEventTarget(), nullptr, Event::kDeliverImmediately));
+      m_events->addEvent(
+          Event(EventTypes::ScreenSuspend, getEventTarget(), nullptr, Event::EventFlags::DeliverImmediately)
+      );
       break;
     }
     *result = TRUE;
@@ -1544,10 +1549,10 @@ bool MSWindowsScreen::mapPressFromEvent(WPARAM msg, LPARAM) const
 void MSWindowsScreen::updateKeysCB(void *)
 {
   // record which keys we think are down
-  bool down[IKeyState::kNumButtons];
+  bool down[IKeyState::s_numButtons];
   bool sendFixes = (isPrimary() && !m_isOnScreen);
   if (sendFixes) {
-    for (KeyButton i = 0; i < IKeyState::kNumButtons; ++i) {
+    for (KeyButton i = 0; i < IKeyState::s_numButtons; ++i) {
       down[i] = m_keyState->isKeyDown(i);
     }
   }
@@ -1564,7 +1569,7 @@ void MSWindowsScreen::updateKeysCB(void *)
   // send key releases for these keys to the active client.
   if (sendFixes) {
     KeyModifierMask mask = pollActiveModifiers();
-    for (KeyButton i = 0; i < IKeyState::kNumButtons; ++i) {
+    for (KeyButton i = 0; i < IKeyState::s_numButtons; ++i) {
       if (down[i] && !m_keyState->isKeyDown(i)) {
         m_keyState->sendKeyEvent(getEventTarget(), false, false, kKeyNone, mask, 1, i);
       }

@@ -17,7 +17,7 @@
 void ArgParserTests::initTestCase()
 {
   m_arch.init();
-  m_log.setFilter(kDEBUG2);
+  m_log.setFilter(LogLevel::Debug2);
   static deskflow::ArgsBase base;
   m_parser.setArgsBase(base);
 }
@@ -244,7 +244,7 @@ void ArgParserTests::client_setInvertScroll()
 
   m_parser.parseClientArgs(clientArgs, argc, kLangCmd.data());
 
-  QCOMPARE(clientArgs.m_clientScrollDirection, deskflow::ClientScrollDirection::INVERT_SERVER);
+  QCOMPARE(clientArgs.m_clientScrollDirection, deskflow::ClientScrollDirection::Inverted);
 }
 
 void ArgParserTests::client_commonArgs()

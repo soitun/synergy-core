@@ -849,7 +849,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
   }
 
   if (m_saveOnExit) {
-    Settings::setValue(Settings::Gui::WindowGeometry, frameGeometry());
+    Settings::setValue(Settings::Gui::WindowGeometry, geometry());
   }
   qDebug() << "quitting application";
   event->accept();
@@ -1026,7 +1026,7 @@ void MainWindow::autoAddScreen(const QString &name)
   if (name.isEmpty())
     return;
 
-  if (m_serverConfig.autoAddScreen(name) == kAutoAddScreenManualClient) {
+  if (m_serverConfig.autoAddScreen(name) == AutoAddScreenManualClient) {
     showConfigureServer(
         tr("Please add the client (%1) to the grid.").arg(Settings::value(Settings::Core::ScreenName).toString())
     );

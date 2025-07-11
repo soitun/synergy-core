@@ -52,14 +52,14 @@ public:
   //@}
 
 protected:
-  enum EResult
+  enum class ConnectionResult
   {
-    kOkay,
-    kUnknown,
-    kDisconnect
+    Okay,
+    Unknown,
+    Disconnect
   };
-  EResult parseHandshakeMessage(const uint8_t *code);
-  EResult parseMessage(const uint8_t *code);
+  ConnectionResult parseHandshakeMessage(const uint8_t *code);
+  ConnectionResult parseMessage(const uint8_t *code);
 
 private:
   // if compressing mouse motion then send the last motion now
@@ -102,7 +102,7 @@ private:
   void checkMissedLanguages() const;
 
 private:
-  using MessageParser = EResult (ServerProxy::*)(const uint8_t *);
+  using MessageParser = ConnectionResult (ServerProxy::*)(const uint8_t *);
 
   Client *m_client = nullptr;
   deskflow::IStream *m_stream = nullptr;
@@ -123,7 +123,7 @@ private:
   double m_keepAliveAlarm = 0.0;
   EventQueueTimer *m_keepAliveAlarmTimer = nullptr;
 
-  MessageParser m_parser;
+  MessageParser m_parser = &ServerProxy::parseHandshakeMessage;
   IEventQueue *m_events = nullptr;
   std::string m_serverLanguage = "";
   bool m_isUserNotifiedAboutLanguageSyncError = false;

@@ -31,17 +31,9 @@
 //
 // SecureSocket
 //
-
-#define MAX_ERROR_SIZE 65535
-
-static const std::size_t MAX_INPUT_BUFFER_SIZE = 1024 * 1024;
+static const std::size_t s_maxInputBufferSize = 1024 * 1024;
 
 static const float s_retryDelay = 0.01f;
-
-enum
-{
-  kMsgSize = 128
-};
 
 struct Ssl
 {
@@ -117,8 +109,9 @@ void SecureSocket::secureAccept()
   ));
 }
 
-TCPSocket::EJobResult SecureSocket::doRead()
+TCPSocket::JobResult SecureSocket::doRead()
 {
+  using enum JobResult;
   static uint8_t buffer[4096];
   memset(buffer, 0, sizeof(buffer));
   int bytesRead = 0;
@@ -127,12 +120,12 @@ TCPSocket::EJobResult SecureSocket::doRead()
   if (isSecureReady()) {
     status = secureRead(buffer, sizeof(buffer), bytesRead);
     if (status < 0) {
-      return kBreak;
+      return Break;
     } else if (status == 0) {
-      return kNew;
+      return New;
     }
   } else {
-    return kRetry;
+    return Retry;
   }
 
   if (bytesRead > 0) {
@@ -142,13 +135,13 @@ TCPSocket::EJobResult SecureSocket::doRead()
     do {
       m_inputBuffer.write(buffer, bytesRead);
 
-      if (m_inputBuffer.getSize() > MAX_INPUT_BUFFER_SIZE) {
+      if (m_inputBuffer.getSize() > s_maxInputBufferSize) {
         break;
       }
 
       status = secureRead(buffer, sizeof(buffer), bytesRead);
       if (status < 0) {
-        return kBreak;
+        return Break;
       }
     } while (bytesRead > 0 || status > 0);
 
@@ -166,14 +159,15 @@ TCPSocket::EJobResult SecureSocket::doRead()
       m_connected = false;
     }
     m_readable = false;
-    return kNew;
+    return New;
   }
 
-  return kRetry;
+  return Retry;
 }
 
-TCPSocket::EJobResult SecureSocket::doWrite()
+TCPSocket::JobResult SecureSocket::doWrite()
 {
+  using enum JobResult;
   static bool s_retry = false;
   static int s_retrySize = 0;
   static int s_staticBufferSize = 0;
@@ -198,7 +192,7 @@ TCPSocket::EJobResult SecureSocket::doWrite()
   }
 
   if (bufferSize == 0) {
-    return kRetry;
+    return Retry;
   }
 
   if (isSecureReady()) {
@@ -207,22 +201,22 @@ TCPSocket::EJobResult SecureSocket::doWrite()
       s_retry = false;
       bufferSize = 0;
     } else if (status < 0) {
-      return kBreak;
+      return Break;
     } else if (status == 0) {
       s_retry = true;
       s_retrySize = bufferSize;
-      return kNew;
+      return New;
     }
   } else {
-    return kRetry;
+    return Retry;
   }
 
   if (bytesWrote > 0) {
     discardWrittenData(bytesWrote);
-    return kNew;
+    return New;
   }
 
-  return kRetry;
+  return Retry;
 }
 
 int SecureSocket::secureRead(void *buffer, int size, int &read)
@@ -549,10 +543,7 @@ void SecureSocket::checkResult(int status, int &retry)
 {
   // ssl errors are a little quirky. the "want" errors are normal and
   // should result in a retry.
-
-  int errorCode = SSL_get_error(m_ssl->m_ssl, status);
-
-  switch (errorCode) {
+  switch (auto errorCode = SSL_get_error(m_ssl->m_ssl, status); errorCode) {
   case SSL_ERROR_NONE:
     retry = 0;
     // operation completed

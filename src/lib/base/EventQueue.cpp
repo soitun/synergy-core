@@ -126,7 +126,8 @@ bool EventQueue::processEvent(Event &event, double timeout, Stopwatch &timer)
   uint32_t dataID;
   IEventQueueBuffer::Type type = m_buffer->getEvent(event, dataID);
   switch (type) {
-  case IEventQueueBuffer::kNone:
+    using enum IEventQueueBuffer::Type;
+  case Unknown:
     if (timeout < 0.0 || timeout <= timer.getTime()) {
       // don't want to fail if client isn't expecting that
       // so if getEvent() fails with an infinite timeout
@@ -135,10 +136,10 @@ bool EventQueue::processEvent(Event &event, double timeout, Stopwatch &timer)
     }
     return false;
 
-  case IEventQueueBuffer::kSystem:
+  case System:
     return true;
 
-  case IEventQueueBuffer::kUser: {
+  case User: {
     std::scoped_lock lock{m_mutex};
     event = removeEvent(dataID);
     return true;
@@ -183,7 +184,7 @@ void EventQueue::addEvent(const Event &event)
     break;
   }
 
-  if ((event.getFlags() & Event::kDeliverImmediately) != 0) {
+  if ((event.getFlags() & Event::EventFlags::DeliverImmediately) != 0) {
     dispatchEvent(event);
     Event::deleteData(event);
   } else if (!(*m_readyCondVar)) {
@@ -463,9 +464,4 @@ void EventQueue::Timer::fillEvent(TimerEvent &event) const
   if (m_time <= 0.0) {
     event.m_count = static_cast<uint32_t>((m_timeout - m_time) / m_timeout);
   }
-}
-
-bool EventQueue::Timer::operator<(const Timer &t) const
-{
-  return m_time < t.m_time;
 }

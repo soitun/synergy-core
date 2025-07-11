@@ -80,9 +80,9 @@ void ServerApp::parseArgs(int argc, const char *const *argv)
 
   if (!result || args().m_shouldExitOk || args().m_shouldExitFail) {
     if (args().m_shouldExitOk) {
-      m_bye(kExitSuccess);
+      m_bye(s_exitSuccess);
     } else {
-      m_bye(kExitArgs);
+      m_bye(s_exitArgs);
     }
   } else {
     if (!args().m_deskflowAddress.empty()) {
@@ -91,7 +91,7 @@ void ServerApp::parseArgs(int argc, const char *const *argv)
         m_deskflowAddress->resolve();
       } catch (XSocketAddress &e) {
         LOG((CLOG_CRIT "%s: %s" BYE, args().m_pname, e.what(), args().m_pname));
-        m_bye(kExitArgs);
+        m_bye(s_exitArgs);
       }
     }
   }
@@ -109,16 +109,16 @@ void ServerApp::help()
        << " [--display <display>]"
 #endif
 
-       << HELP_SYS_ARGS HELP_COMMON_ARGS "\n"
+       << s_helpSysArgs << s_helpCommonArgs << "\n"
        << "\n"
        << "Start the " << kAppName << " mouse/keyboard sharing server.\n"
        << "\n"
        << "  -a, --address <address>  listen for clients on the given address.\n"
        << "  -c, --config <pathname>  path of the configuration file\n"
-       << HELP_COMMON_INFO_1
+       << s_helpGeneralArgs
        << "      --disable-client-cert-check disable client SSL certificate \n"
           "                                     checking (deprecated)\n"
-       << HELP_SYS_INFO HELP_COMMON_INFO_2 << "\n"
+       << s_helpSysInfo << s_helpVersionArgs << "\n"
 
 #if WINAPI_XWINDOWS
        << "      --display <display>  when in X mode, connect to the X server\n"
@@ -127,7 +127,7 @@ void ServerApp::help()
 
        << "* marks defaults.\n"
 
-       << kHelpNoWayland
+       << s_helpNoWayland
 
        << "\n"
        << "The argument for --address is of the form: [<hostname>][:<port>].  "
@@ -162,12 +162,12 @@ void ServerApp::loadConfig()
   const auto path = args().m_configFile;
   if (path.empty()) {
     LOG((CLOG_CRIT "no configuration path provided"));
-    m_bye(kExitConfig);
+    m_bye(s_exitConfig);
   }
 
   if (!loadConfig(path)) {
     LOG((CLOG_CRIT "%s: failed to load config: %s", args().m_pname, path.c_str()));
-    m_bye(kExitConfig);
+    m_bye(s_exitConfig);
   }
 }
 
@@ -609,7 +609,7 @@ int ServerApp::mainLoop()
   // canonicalize the primary screen name
   if (std::string primaryName = args().m_config->getCanonicalName(args().m_name); primaryName.empty()) {
     LOG((CLOG_CRIT "unknown screen name `%s'", args().m_name.c_str()));
-    return kExitFailed;
+    return s_exitFailed;
   }
 
   // start server, etc
@@ -661,7 +661,7 @@ int ServerApp::mainLoop()
   updateStatus();
   LOG((CLOG_NOTE "stopped server"));
 
-  return kExitSuccess;
+  return s_exitSuccess;
 }
 
 void ServerApp::resetServer()
@@ -735,6 +735,6 @@ void ServerApp::startNode()
   // we shouldn't retry.
   LOG((CLOG_DEBUG1 "starting server"));
   if (!startServer()) {
-    m_bye(kExitFailed);
+    m_bye(s_exitFailed);
   }
 }

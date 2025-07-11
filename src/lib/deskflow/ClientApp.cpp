@@ -58,7 +58,7 @@
 #include <sstream>
 #include <stdio.h>
 
-#define RETRY_TIME 1.0
+constexpr static auto s_retryTime = 1.0;
 
 ClientApp::ClientApp(IEventQueue *events) : App(events, new deskflow::ClientArgs())
 {
@@ -72,9 +72,9 @@ void ClientApp::parseArgs(int argc, const char *const *argv)
 
   if (!result || args().m_shouldExitOk || args().m_shouldExitFail) {
     if (args().m_shouldExitOk) {
-      m_bye(kExitSuccess);
+      m_bye(s_exitSuccess);
     } else {
-      m_bye(kExitArgs);
+      m_bye(s_exitArgs);
     }
   } else {
     // save server address
@@ -87,9 +87,9 @@ void ClientApp::parseArgs(int argc, const char *const *argv)
         // we'll try to resolve the address each time we connect to the
         // server.  a bad port will never get better.  patch by Brent
         // Priddy.
-        if (!args().m_restartable || e.getError() == XSocketAddress::kBadPort) {
+        if (!args().m_restartable || e.getError() == XSocketAddress::SocketError::BadPort) {
           LOG((CLOG_CRIT "%s: %s" BYE, args().m_pname, e.what(), args().m_pname));
-          m_bye(kExitFailed);
+          m_bye(s_exitFailed);
         }
       }
     }
@@ -106,12 +106,12 @@ void ClientApp::help()
 #ifdef WINAPI_XWINDOWS
        << " [--display <display>]"
 #endif
-       << HELP_SYS_ARGS << HELP_COMMON_ARGS << " <server-address>"
+       << s_helpSysArgs << s_helpCommonArgs << " <server-address>"
        << "\n\n"
        << "Connect to a " << kAppName << " mouse/keyboard sharing server.\n"
        << "\n"
        << "  -a, --address <address>  local network interface address.\n"
-       << HELP_COMMON_INFO_1 << HELP_SYS_INFO << "      --yscroll <delta>    defines the vertical scrolling delta,\n"
+       << s_helpGeneralArgs << s_helpSysInfo << "      --yscroll <delta>    defines the vertical scrolling delta,\n"
        << "                             which is 120 by default.\n"
        << "      --sync-language      enable language synchronization.\n"
        << "      --invert-scroll      invert scroll direction on this\n"
@@ -120,10 +120,10 @@ void ClientApp::help()
        << "      --display <display>  when in X mode, connect to the X server\n"
        << "                             at <display>.\n"
 #endif
-       << HELP_COMMON_INFO_2 << "\n"
+       << s_helpVersionArgs << "\n"
        << "* marks defaults.\n"
 
-       << kHelpNoWayland
+       << s_helpNoWayland
 
        << "\n"
        << "The server address is of the form: [<hostname>][:<port>].\n"
@@ -252,7 +252,7 @@ void ClientApp::handleClientFailed(const Event &e)
     updateStatus(std::string("Failed to connect to server: ") + info->m_what + " Trying next address...");
     LOG((CLOG_WARN "failed to connect to server=%s, trying next address", info->m_what.c_str()));
     if (!m_suspended) {
-      scheduleClientRestart(RETRY_TIME);
+      scheduleClientRestart(s_retryTime);
     }
   } else {
     m_lastServerAddressIndex = 0;
@@ -271,7 +271,7 @@ void ClientApp::handleClientRefused(const Event &e)
   } else {
     LOG((CLOG_WARN "failed to connect to server: %s", info->m_what.c_str()));
     if (!m_suspended) {
-      scheduleClientRestart(RETRY_TIME);
+      scheduleClientRestart(s_retryTime);
     }
   }
 }
@@ -282,7 +282,7 @@ void ClientApp::handleClientDisconnected()
   if (!args().m_restartable) {
     m_events->addEvent(Event(EventTypes::Quit));
   } else if (!m_suspended) {
-    scheduleClientRestart(RETRY_TIME);
+    scheduleClientRestart(s_retryTime);
   }
   updateStatus();
 }
@@ -417,7 +417,7 @@ int ClientApp::mainLoop()
   updateStatus();
   LOG((CLOG_NOTE "stopped client"));
 
-  return kExitSuccess;
+  return s_exitSuccess;
 }
 
 static int daemonMainLoopStatic(int argc, const char **argv)
@@ -462,7 +462,7 @@ void ClientApp::startNode()
   // we shouldn't retry.
   LOG((CLOG_DEBUG1 "starting client"));
   if (!startClient()) {
-    m_bye(kExitFailed);
+    m_bye(s_exitFailed);
   }
 }
 

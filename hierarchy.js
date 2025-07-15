@@ -10,6 +10,7 @@ var hierarchy =
       [ "InputFilter::SwitchInDirectionAction", "classInputFilter_1_1SwitchInDirectionAction.html", null ],
       [ "InputFilter::SwitchToScreenAction", "classInputFilter_1_1SwitchToScreenAction.html", null ]
     ] ],
+    [ "ActionDialog::ActionTypes", "structActionDialog_1_1ActionTypes.html", null ],
     [ "KeyState::AddActiveModifierContext", "structKeyState_1_1AddActiveModifierContext.html", null ],
     [ "ARCH_DAEMON", null, [
       [ "Arch", "classArch.html", null ]
@@ -41,6 +42,7 @@ var hierarchy =
     [ "CBMPHeader", "structCBMPHeader.html", null ],
     [ "CBMPInfoHeader", "structCBMPInfoHeader.html", null ],
     [ "deskflow::server::Config::CellEdge", "classdeskflow_1_1server_1_1Config_1_1CellEdge.html", null ],
+    [ "ChunkType", "structChunkType.html", null ],
     [ "XWindowsClipboard::CICCCMGetClipboard", "classXWindowsClipboard_1_1CICCCMGetClipboard.html", null ],
     [ "Settings::Client", "structSettings_1_1Client.html", null ],
     [ "ClientProxy1_0::ClientClipboard", "structClientProxy1__0_1_1ClientClipboard.html", null ],
@@ -79,6 +81,7 @@ var hierarchy =
         [ "ClipboardChunk", "classClipboardChunk.html", null ]
       ] ]
     ] ],
+    [ "Event::EventFlags", "structEvent_1_1EventFlags.html", null ],
     [ "EventQueueTimer", "classEventQueueTimer.html", null ],
     [ "std::exception", null, [
       [ "XThread", "classXThread.html", [

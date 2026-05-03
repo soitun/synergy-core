@@ -1,6 +1,7 @@
 var classApp =
 [
     [ "XNoEiSupport", "classApp_1_1XNoEiSupport.html", "classApp_1_1XNoEiSupport" ],
+    [ "LoopErrorCode", "structApp_1_1LoopErrorCode.html", "structApp_1_1LoopErrorCode" ],
     [ "App", "classApp.html#a6e71fe1043dc15637ded72799b92df0d", null ],
     [ "App", "classApp.html#a5ecbaa8022d8e3a787779f2549b33379", null ],
     [ "App", "classApp.html#a9bd1531cdd8af54c9c14b3931512410a", null ],
@@ -8,6 +9,7 @@ var classApp =
     [ "appUtil", "classApp.html#a9ebe7c05d696bb7dddd0bad9b51c94e9", null ],
     [ "bye", "classApp.html#ab4f1cdee9e6fa5c0f0fcb34b0beb9048", null ],
     [ "getEvents", "classApp.html#a2999f6b9b1129542847a07bcf5bc7c21", null ],
+    [ "getExitCode", "classApp.html#a7feb588e84a611d3643a8131f1311e67", null ],
     [ "getSocketMultiplexer", "classApp.html#a60b51c7e60aa48b222849fbdc68971a0", null ],
     [ "handleScreenError", "classApp.html#ae59ab33fd366ee0609bd4df8e807fab0", null ],
     [ "initApp", "classApp.html#a724365d623e53560cf6a9f7246081ad9", null ],
@@ -19,10 +21,12 @@ var classApp =
     [ "operator=", "classApp.html#ab51ebb2be69b544372c4ab6a9169264f", null ],
     [ "parseArgs", "classApp.html#ab25cb14c8734dd3d83f96240f3b25740", null ],
     [ "processName", "classApp.html#a975d935098b0a08ef69b1af32d85a499", null ],
+    [ "quit", "classApp.html#ab474007a8e53ffa41f9a13e0640b387f", null ],
     [ "run", "classApp.html#a870db6a13733d61fa6c85b18af1e4a1f", null ],
     [ "runEventsLoop", "classApp.html#aab3f6534616a1a83c021e0d78f7469c0", null ],
     [ "setByeFunc", "classApp.html#a7007955907d7a63830ee966fc25110da", null ],
     [ "setEvents", "classApp.html#acbc962ac1eea477e7cf22e97c1c04bed", null ],
     [ "setSocketMultiplexer", "classApp.html#ad4d9e0526734148f3d7364f2933c6d57", null ],
-    [ "setupFileLogging", "classApp.html#a6ee3b458bbf3a3b42bc7b51af7e9f1bc", null ]
+    [ "setupFileLogging", "classApp.html#a6ee3b458bbf3a3b42bc7b51af7e9f1bc", null ],
+    [ "updateExitCode", "classApp.html#a24574f40d27af7cb2c24dc1624d9ff8f", null ]
 ];

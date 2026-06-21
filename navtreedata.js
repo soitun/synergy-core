@@ -129,10 +129,10 @@ var NAVTREEINDEX =
 [
 "AboutDialog_8cpp.html",
 "DeskflowException_8h.html",
-"KeyTypes_8h.html#a375c062c48f1e029279c21616d1b9acd",
-"MSWindowsDesks_8cpp.html#a84a38b724e9981393f2e9fee955a3bda",
-"OSXKeyState_8cpp.html#a5d80ee8e879186619558806ad996f98d",
-"Stopwatch_8h.html",
+"KeyTypes_8h.html#a32ef4b8c6fd9636322655e4376cbc8ef",
+"MSWindowsDesks_8cpp.html#a82170759008868615bb94ecf4503fa9e",
+"OSXKeyState_8cpp.html#a4b0ad8af86e283641f771684ed7ab7b9",
+"StatusBar_8cpp.html",
 "classAppUtilUnix.html#ae67c326a965f9af4a61ca531a3f2c314",
 "classArchNetworkWinsock.html#ad8a39ba26fb41058ae18b7168ec5f9cf",
 "classClientProxy1__3.html#a3b1f7c3c5048c2fda127f97512589221",
@@ -142,15 +142,15 @@ var NAVTREEINDEX =
 "classMSWindowsScreen.html#a3eb0a27687fab4beded9e48c65b71ad7",
 "classOSXUchrKeyResource.html#a6a74fddd74f2c0e4882aa3659c5ae5a4",
 "classScreenSetupModel.html#ad940770e28d0c34fc632025d6b614a2d",
-"classSettings.html#ae4b815a70e84d0dd40b295cb1d0d6a9d",
-"classUnicode.html#a6cf183d92569cbd9d50211908810ffec",
-"classXWindowsScreen.html#ac62d6b5b8242feb2819086a550d23836",
-"classdeskflow_1_1KeyMap.html#aa20482dc7cf49a36c89397da1d3001ec",
-"classdeskflow_1_1gui_1_1CoreProcess.html#a3da8510b96ea0915afb70462649dc2d4",
-"classdeskflow_1_1server_1_1Config.html#afb04dc32eaa76da1b5a2c303b516c24e",
-"functions_func_g.html",
-"namespacedeskflow.html#a34787a880fd439e02383f336665d7bc2a55a9a46b4d6ca6c6cdca12c1361ff1aa",
-"structIScreen_1_1ClipboardInfo.html#a7738ad80c618ba7007173d8bd0f23969"
+"classSimpleEventQueueBuffer.html#a1660098f79ed1c822ff0f8680e04da6a",
+"classVersionChecker.html#a50c74a07497c4b2bf506f50647361472",
+"classXWindowsUtil.html#af24dc03672e63abbebd9730fd6b35e07",
+"classdeskflow_1_1KeyMap.html#aa80f9c7cc6e58ef0949f30bc7742be46",
+"classdeskflow_1_1gui_1_1CoreProcess.html#a0a6b6dc9aa924805e81b27fa9a437391",
+"classdeskflow_1_1server_1_1Config.html#af1d0a9ed19208eaf3509cc59323ce0de",
+"functions_enum.html",
+"namespacedeskflow.html#a34787a880fd439e02383f336665d7bc2a0eadd8fb22f5ae32670ec0c5f24755b1",
+"structFingerprint.html#a51334b683be2778fac1e598c4211a2bc"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

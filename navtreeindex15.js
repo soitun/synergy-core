@@ -1,15 +1,5 @@
 var NAVTREEINDEX15 =
 {
-"classSettings.html#ae4b815a70e84d0dd40b295cb1d0d6a9d":[6,0,210,26],
-"classSettings.html#ae9e80e06caddd4c619dc286848b1f187":[6,0,210,14],
-"classSettings.html#afd0a8dbda15587467729da0b489dd97d":[6,0,210,24],
-"classSettingsDialog.html":[6,0,211],
-"classSettingsDialog.html#a2ae5c7308d4e1598e0f13a5800a8f51e":[6,0,211,3],
-"classSettingsDialog.html#a51343308438b7adbcc13facba2249ab0":[6,0,211,4],
-"classSettingsDialog.html#aa2f631d029bfc6a055934d4d0cd1b7c6":[6,0,211,1],
-"classSettingsDialog.html#aa5b8beee34cdf30792233744634512ee":[6,0,211,2],
-"classSettingsDialog.html#afc75245bbf56325380e8096c6dbe76c0":[6,0,211,0],
-"classSimpleEventQueueBuffer.html":[6,0,212],
 "classSimpleEventQueueBuffer.html#a1660098f79ed1c822ff0f8680e04da6a":[6,0,212,8],
 "classSimpleEventQueueBuffer.html#a1a95764f38fa13112b303ff6eb0c3e44":[6,0,212,3],
 "classSimpleEventQueueBuffer.html#a2c01276cbb3afc0a8772e967e6da5d0f":[6,0,212,5],
@@ -249,5 +239,15 @@ var NAVTREEINDEX15 =
 "classUnicode.html":[6,0,242],
 "classUnicode.html#a1be18b41a5f937d7d795fe3c9fac1d9e":[6,0,242,2],
 "classUnicode.html#a318adabcf876bf85a933412df0732c97":[6,0,242,0],
-"classUnicode.html#a648d34ac2f92bfae890e2be5b21a004b":[6,0,242,4]
+"classUnicode.html#a648d34ac2f92bfae890e2be5b21a004b":[6,0,242,4],
+"classUnicode.html#a6cf183d92569cbd9d50211908810ffec":[6,0,242,3],
+"classUnicode.html#a7ce4b7916c31ff9b06aa3936dd53bc5c":[6,0,242,1],
+"classUnknownClientException.html":[6,0,243],
+"classUnknownClientException.html#ab4a8bc47fd62951e6f7c1cdc325a5b09":[6,0,243,3],
+"classUnknownClientException.html#ac7609989daccff293c204c39204fd954":[6,0,243,1],
+"classUnknownClientException.html#ad2020a088749677f2e636cba876a23d0":[6,0,243,0],
+"classUnknownClientException.html#ae89842e669a44aaa2cd0a882d8a7dbdf":[6,0,243,2],
+"classVersionChecker.html":[6,0,244],
+"classVersionChecker.html#a1fc73b7fe6ac155ed9a69fb91315d56a":[6,0,244,2],
+"classVersionChecker.html#a39ccb925a6aab949adc6248bda078293":[6,0,244,0]
 };
